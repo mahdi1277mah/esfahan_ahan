@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="fa"><head>
+<meta http-equiv="content-type" content="text/html; charset=UTF-8">
+  <meta charset="utf-8">
+  <title>EasyTrader</title>
+  <!-- base href="https://d.easytrader.emofid.com/" -->
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" type="image/x-icon" href="https://d.easytrader.emofid.com/favicon.ico">
+  <meta name="theme-color" content="#1976d2">
+  <link rel="manifest" href="https://d.easytrader.emofid.com/manifest.webmanifest">
+  <meta name="theme-color" content="#1976d2">
+  <style>
+    .loading,
+    .content-loading {
+      pointer-events: none;
+    }
+
+    .loading::before,
+    .content-loading::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      top: 0;
+      opacity: 1;
+      z-index: 101;
+    }
+
+    .loading.loading-before-app::before,
+    .content-loading.loading-before-app::before {
+      z-index: 0;
+      background-color: transparent;
+    }
+
+    .loading.loading-before-app::after,
+    .content-loading.loading-before-app::after {
+      z-index: 0;
+    }
+
+    .loading::after,
+    .content-loading::after {
+      content: "";
+      background: url(/assets/images/spinner.svg) no-repeat center;
+      width: 64px;
+      height: 64px;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      margin-top: -32px;
+      margin-left: -32px;
+      z-index: 10;
+      text-rendering: auto;
+      line-height: inherit;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      -webkit-animation: mdi-spin 1.2s infinite linear;
+      animation: mdi-spin 1.2s infinite linear;
+      pointer-events: none;
+      z-index: 101;
+    }
+
+    @keyframes mdi-spin {
+        0% {
+            -webkit-transform: rotate(0deg);
+            transform: rotate(0deg);
+        }
+        100% {
+            -webkit-transform: rotate(359deg);
+            transform: rotate(359deg);
+        }
+    }
+    
+    .d-main_inner {
+      background-color: #e3e8f1;
+    }
+  </style>
+<link rel="stylesheet" href="EasyTrader_files/styles.css"><style type="text/css">@font-face{
+    font-family: 'bnazanin';
+    src:'bnazanin.ttf';
+}
+.dideo-tooltip {
+    position: relative;
+    display: inline-block;
+    font-family: 'bnazanin';
+    margin-bottom: 2px;
+}
+
+.dideo-tooltip .tooltiptext {
+    visibility: hidden;
+    font-family: 'bnazanin';
+    width: 120px;
+    font-size: 13px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    position: absolute;
+    z-index: 1;
+    top: 0px;
+    left: 110%;
+}
+.dideo-img{
+    width: 25px;
+    height: 25px;
+    margin-bottom: -7px;
+    filter: drop-shadow(0px 0px 2px #adadad);
+    webkit:filter: drop-shadow(0px 0px 2px #adadad);
+}
+.dideo-tooltip .tooltiptext::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    right: 100%;
+    margin-top: -5px;
+    border-width: 5px;
+    border-style: solid;
+    border-color: transparent black transparent transparent;
+}
+.dideo-tooltip:hover .tooltiptext {
+    visibility: visible;
+}
+.srg{
+    min-width: 750px;
+}</style><style></style><style>[_nghost-fkr-c157]{display:flex;flex-wrap:nowrap;justify-content:flex-start;align-items:stretch;overflow:hidden;width:100%;height:100%}[_nghost-fkr-c157] > .as-split-gutter[_ngcontent-fkr-c157]{flex-grow:0;flex-shrink:0;background-color:#eee;display:flex;align-items:center;justify-content:center}[_nghost-fkr-c157] > .as-split-gutter[_ngcontent-fkr-c157] > .as-split-gutter-icon[_ngcontent-fkr-c157]{width:100%;height:100%;background-position:center center;background-repeat:no-repeat}[_nghost-fkr-c157]    >.as-split-area{flex-grow:0;flex-shrink:0;overflow-x:hidden;overflow-y:auto}[_nghost-fkr-c157]    >.as-split-area.as-hidden{flex:0 1 0!important;overflow-x:hidden;overflow-y:hidden}.as-horizontal[_nghost-fkr-c157]{flex-direction:row}.as-horizontal[_nghost-fkr-c157] > .as-split-gutter[_ngcontent-fkr-c157]{flex-direction:row;cursor:col-resize;height:100%}.as-horizontal[_nghost-fkr-c157] > .as-split-gutter[_ngcontent-fkr-c157] > .as-split-gutter-icon[_ngcontent-fkr-c157]{background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAUAAAAeCAYAAADkftS9AAAAIklEQVQoU2M4c+bMfxAGAgYYmwGrIIiDjrELjpo5aiZeMwF+yNnOs5KSvgAAAABJRU5ErkJggg==)}.as-horizontal[_nghost-fkr-c157]    >.as-split-area{height:100%}.as-vertical[_nghost-fkr-c157]{flex-direction:column}.as-vertical[_nghost-fkr-c157] > .as-split-gutter[_ngcontent-fkr-c157]{flex-direction:column;cursor:row-resize;width:100%}.as-vertical[_nghost-fkr-c157] > .as-split-gutter[_ngcontent-fkr-c157]   .as-split-gutter-icon[_ngcontent-fkr-c157]{background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAFCAMAAABl/6zIAAAABlBMVEUAAADMzMzIT8AyAAAAAXRSTlMAQObYZgAAABRJREFUeAFjYGRkwIMJSeMHlBkOABP7AEGzSuPKAAAAAElFTkSuQmCC)}.as-vertical[_nghost-fkr-c157]    >.as-split-area{width:100%}.as-vertical[_nghost-fkr-c157]    >.as-split-area.as-hidden{max-width:0}.as-disabled[_nghost-fkr-c157] > .as-split-gutter[_ngcontent-fkr-c157]{cursor:default}.as-disabled[_nghost-fkr-c157] > .as-split-gutter[_ngcontent-fkr-c157]   .as-split-gutter-icon[_ngcontent-fkr-c157]{background-image:url("")}.as-transition.as-init[_nghost-fkr-c157]:not(.as-dragging)    >.as-split-area, .as-transition.as-init[_nghost-fkr-c157]:not(.as-dragging) > .as-split-gutter[_ngcontent-fkr-c157]{transition:flex-basis .3s}</style><script type="text/javascript" src="EasyTrader_files/jquery-3.js" async=""></script><script type="text/javascript" src="EasyTrader_files/my-crisp.js" async=""></script><script type="text/javascript" src="EasyTrader_files/jquery-3.js" async=""></script><script charset="utf-8" src="EasyTrader_files/5-es2015.js"></script><link href="https://client.relay.crisp.chat/" rel="dns-prefetch" crossorigin=""><link href="https://settings.crisp.chat/" rel="preconnect" crossorigin=""><link href="https://client.crisp.chat/" rel="preconnect" crossorigin=""><link href="https://image.crisp.chat/" rel="preconnect" crossorigin=""><script src="EasyTrader_files/client.js" type="text/javascript" async=""></script><link href="EasyTrader_files/client_default.css" type="text/css" rel="stylesheet"><script type="text/javascript" src="EasyTrader_files/polyfills.js" async=""></script><script type="text/javascript" src="EasyTrader_files/bundle.js" async=""></script><style>.customHeaderLabel[_ngcontent-fkr-c183]{margin-left:5px}.customSortDownLabel[_ngcontent-fkr-c183]{margin-left:10px}.customSortUpLabel[_ngcontent-fkr-c183]{margin-left:3px}.customSortRemoveLabel[_ngcontent-fkr-c183]{font-size:11px;margin-left:3px}.active[_ngcontent-fkr-c183]{color:#6495ed}.hidden[_ngcontent-fkr-c183]{display:none}</style></head>
+
+<!-- Crisp has been moved to scriptLoaderService -->
+<!-- <script async type="text/javascript">
+  window.$crisp=[];
+  window.CRISP_WEBSITE_ID="e95056ad-2681-452d-976d-0c2a304165c9";
+  (function(){
+    d=document;
+    s=d.createElement("script");
+    s.src="https://client.crisp.chat/l.js";
+    s.async=1;
+    d.getElementsByTagName("head")[0].appendChild(s);
+    })();
+    // $crisp.push(["set", "session:segments", [["Ez"]]]);
+</script> -->
+
+<body cz-shortcut-listen="true">
+  
+  <link href="EasyTrader_files/colorize-light.css" id="theme" rel="stylesheet">
+
+
+  <div class="loading loading-before-app"></div>
+  <app-root _nghost-fkr-c216="" ng-version="11.0.5"><main-layout _ngcontent-fkr-c216="" id="root" _nghost-fkr-c214=""><main _ngcontent-fkr-c214="" class="d-main colorize-light"><div _ngcontent-fkr-c214="" class="overlay"></div><div _ngcontent-fkr-c214="" class="menu"><div _ngcontent-fkr-c214="" class="menu_items position-absolute full-offset z-1 d-flex flex-column align-items-center justify-content-start"><ul _ngcontent-fkr-c214="" class="list-unstyled p-0 m-0 w-100"><li _ngcontent-fkr-c214="" class="text-center"><a _ngcontent-fkr-c214="" href="https://d.easytrader.emofid.com/" class="d-inline-block py-2" dideo-checked="true"><img _ngcontent-fkr-c214="" src="EasyTrader_files/easy-logo.png" style="width: 24px;"></a></li><li _ngcontent-fkr-c214="" title="جستجو (Esc)" class="menu_item menu_item_panel"><span _ngcontent-fkr-c214=""><i _ngcontent-fkr-c214="" class="mdi mdi-24px mdi-magnify"></i></span></li></ul><ul _ngcontent-fkr-c214="" class="list-unstyled p-0 m-0 w-100"><li _ngcontent-fkr-c214="" class="menu_item menu_item_tab"><span _ngcontent-fkr-c214=""><i _ngcontent-fkr-c214="" class="mdi mdi-20px mdi-eye line-height-none ml-1"> دیده‌بان </i></span></li><li _ngcontent-fkr-c214="" class="menu_item menu_item_tab"><span _ngcontent-fkr-c214=""><i _ngcontent-fkr-c214="" class="mdi mdi-20px mdi-chart-arc line-height-none ml-1 mdi-rotate-270"> پرتفوی </i></span></li></ul><ul _ngcontent-fkr-c214="" class="list-unstyled p-0 m-0 w-100"><li _ngcontent-fkr-c214="" title="تاریخچه سفارشات" class="menu_item" tabindex="0"><span _ngcontent-fkr-c214=""><i _ngcontent-fkr-c214="" class="mdi mdi-24px mdi-calendar-clock"></i></span></li><li _ngcontent-fkr-c214="" title="گردش حساب" class="menu_item" tabindex="0"><span _ngcontent-fkr-c214=""><i _ngcontent-fkr-c214="" class="mdi mdi-24px mdi-history"></i></span></li><li _ngcontent-fkr-c214="" title="ایزی فیلتر" class="menu_item" tabindex="0"><span _ngcontent-fkr-c214=""><i _ngcontent-fkr-c214="" class="mdi mdi-24px mdi-filter-outline"></i></span></li><li _ngcontent-fkr-c214="" title="ایزی چارت" class="menu_item menu_item--active" tabindex="0"><span _ngcontent-fkr-c214=""><i _ngcontent-fkr-c214="" class="mdi mdi-24px mdi-chart-areaspline"></i></span></li></ul><ul _ngcontent-fkr-c214="" class="list-unstyled p-0 m-0 w-100 mt-5"><li _ngcontent-fkr-c214="" title="پیام‌ ها" class="menu_item menu_item_panel"><span _ngcontent-fkr-c214=""><i _ngcontent-fkr-c214="" class="mdi mdi-24px mdi-comment-processing-outline"></i></span><div _ngcontent-fkr-c214="" class="badges"><span _ngcontent-fkr-c214="" class="badge badge-info align-self-center">۶۴ </span><!----><!----><!----></div></li><li _ngcontent-fkr-c214="" title="نمای بازار" class="menu_item menu_item_panel"><span _ngcontent-fkr-c214=""><i _ngcontent-fkr-c214="" class="mdi mdi-24px mdi-chart-bar-stacked"></i></span></li></ul><ul _ngcontent-fkr-c214="" class="list-unstyled p-0 m-0 mb-3 w-100 mt-auto"><li _ngcontent-fkr-c214="" title="پشتیبانی آنلاین" class="menu_item"><span _ngcontent-fkr-c214=""><i _ngcontent-fkr-c214="" class="mdi mdi-24px mdi-face-agent"></i></span></li><!----><li _ngcontent-fkr-c214="" title="تغییر چیدمان" class="menu_item menu_item_panel"><span _ngcontent-fkr-c214=""><i _ngcontent-fkr-c214="" class="mdi mdi-24px mdi-view-compact"></i></span></li><li _ngcontent-fkr-c214="" title="پروفایل" class="menu_item menu_item_panel"><span _ngcontent-fkr-c214=""><i _ngcontent-fkr-c214="" class="mdi mdi-24px mdi-account-settings-outline position-relative" style="bottom: 2px;"></i></span><div _ngcontent-fkr-c214="" dir="ltr" class="badges d-flex justify-content-between"><!----><!----><!----></div></li><li _ngcontent-fkr-c214="" title="خروج" class="menu_item"><span _ngcontent-fkr-c214=""><i _ngcontent-fkr-c214="" class="mdi mdi-24px mdi-power"></i></span></li></ul></div><div _ngcontent-fkr-c214="" class="panel overflow-hidden"><div _ngcontent-fkr-c214="" class="h-100"><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----><!----></div></div></div><div _ngcontent-fkr-c214="" class="d-flex h-100"><!----><!----><div _ngcontent-fkr-c214="" class="d-main_inner h-100 flex-grow-1 d-flex overflow-hidden"><div _ngcontent-fkr-c214="" class="d-flex flex-column h-100 w-100"><!----><as-split _ngcontent-fkr-c214="" direction="vertical" unit="percent" guttersize="8" _nghost-fkr-c157="" class="as-vertical as-percent as-init"><as-split-area _ngcontent-fkr-c214="" minsize="60" class="position-relative as-split-area" style="order: 0; flex: 0 0 calc(94% - 7.52px);"><div _ngcontent-fkr-c214="" class="overlay full-offset"></div><router-outlet _ngcontent-fkr-c214=""></router-outlet><app-d-trading-view _nghost-fkr-c222=""><div _ngcontent-fkr-c222="" id="tv_chart_container" class="app-tv-chart-container h-100 overflow-hidden rounded"><iframe id="tradingview_3287e" name="tradingview_3287e" src="EasyTrader_files/fa-tv-chart.htm" allowtransparency="true" scrolling="no" allowfullscreen="" style="display: block; width: 100%; height: 100%;" __idm_frm__="10737418266" frameborder="0"></iframe></div></app-d-trading-view><!----></as-split-area><as-split-area _ngcontent-fkr-c214="" minsize="6" class="as-split-area as-min" style="order: 2; flex: 0 0 calc(6% - 0.48px);"><d-orders-grid _ngcontent-fkr-c214="" class="mt-2" _nghost-fkr-c185=""><div _ngcontent-fkr-c185="" class="position-relative h-100"><div _ngcontent-fkr-c185="" class="d-flex flex-column h-100"><div _ngcontent-fkr-c185="" class="d-flex flex-shrink-0"><div _ngcontent-fkr-c185="" class="flex-grow-1 d-flex overflow-hidden" style="min-height: 37px;"><div _ngcontent-fkr-c185="" class="tabs ml-1 position-relative" style="max-width: calc(100% - 61px);"><div _ngcontent-fkr-c185="" class="tabs-holder d-flex align-items-center bg-principal h-100 p-1 position-relative rounded-top"><div _ngcontent-fkr-c185="" class="d-inline-flex items-scroller no-wrap overflow-hidden"><div _ngcontent-fkr-c185="" class="tab rounded d-flex align-items-center active"><span _ngcontent-fkr-c185="" class="d-flex align-items-center"> کل سفارشات <i _ngcontent-fkr-c185="" class="badge mr-2 text-light" style="font-style: normal; background-color: #D770AD;">0</i></span></div><div _ngcontent-fkr-c185="" class="tab rounded d-flex align-items-center"><span _ngcontent-fkr-c185="" class="d-flex align-items-center"> سفارشات باز <i _ngcontent-fkr-c185="" class="badge mr-2 text-light" style="font-style: normal; background-color: #967ADC;">0</i></span></div><div _ngcontent-fkr-c185="" class="tab rounded d-flex align-items-center"><span _ngcontent-fkr-c185="" class="d-flex align-items-center"> انجام شده <i _ngcontent-fkr-c185="" class="badge badge-primary mr-2" style="font-style: normal;">0</i></span></div><div _ngcontent-fkr-c185="" class="tab rounded d-flex align-items-center"><span _ngcontent-fkr-c185="" class="d-flex align-items-center"> پیشنویس <i _ngcontent-fkr-c185="" class="badge badge-warning mr-2" style="font-style: normal;">0</i></span></div></div></div><span _ngcontent-fkr-c185="" class="curve-after"></span></div><div _ngcontent-fkr-c185="" class="rounded bg-principal mb-1 px-1 d-flex align-items-center position-relative z-1"><span _ngcontent-fkr-c185="" title="بارگزاری مجدد" class="icon mdi mdi-refresh mdi-18px text-slate-grey"></span><span _ngcontent-fkr-c185="" title="انتخاب سفارش‌" class="icon mdi mdi-checkbox-multiple-marked-outline mdi-18px text-slate-grey"></span></div><!----></div><div _ngcontent-fkr-c185="" class="d-flex mb-1"><div _ngcontent-fkr-c185="" title="فعالیت امروز" class="rounded bg-principal mr-1 px-1 d-flex align-items-center"><span _ngcontent-fkr-c185="" class="icon mdi mdi-timetable mdi-20px text-slate-grey"></span></div><div _ngcontent-fkr-c185="" class="rounded bg-principal mr-1 px-1 d-flex align-items-center"><span _ngcontent-fkr-c185="" title="انجام شده (F4)" class="icon mdi mdi-18px text-primary mdi-checkbox-blank-circle"></span><span _ngcontent-fkr-c185="" title="پیش‌نویس (F3)" class="icon mdi mdi-18px text-warning mdi-checkbox-blank-circle"></span><span _ngcontent-fkr-c185="" title="فروش (F2)" class="icon mdi mdi-18px text-danger mdi-checkbox-blank-circle"></span><span _ngcontent-fkr-c185="" title="خرید (F1)" class="icon mdi mdi-18px text-success mdi-checkbox-blank-circle"></span></div></div></div><div _ngcontent-fkr-c185="" class="d-flex bg-principal h-100 rounded overflow-hidden p-2" style="border-top-right-radius: 0 !important;"><div _ngcontent-fkr-c185="" class="flex-grow-1 position-relative overflow-hidden rounded"><!----><ag-grid-angular _ngcontent-fkr-c185="" animaterows="" rowselection="single" class="ag-theme-balham flex-grow-1"><div ref="eRootWrapper" class="ag-root-wrapper ag-layout-normal ag-rtl">
+                <!--AG-GRID-HEADER-DROP-ZONES--><div class="ag-column-drop-wrapper"><div class="ag-unselectable ag-column-drop ag-column-drop-horizontal ag-column-drop-empty ag-hidden"><div class="ag-column-drop-title-bar ag-column-drop-horizontal-title-bar"><span class="ag-icon ag-icon-group ag-column-drop-icon ag-column-drop-horizontal-icon" unselectable="on" role="presentation"></span></div><div class="ag-column-drop-list ag-column-drop-horizontal-list"><span class="ag-column-drop-empty-message ag-column-drop-horizontal-empty-message">Drag here to set row groups</span></div></div><div class="ag-unselectable ag-column-drop ag-column-drop-horizontal ag-column-drop-empty ag-hidden"><div class="ag-column-drop-title-bar ag-column-drop-horizontal-title-bar"><span class="ag-icon ag-icon-pivot ag-column-drop-icon ag-column-drop-horizontal-icon" unselectable="on" role="presentation"></span></div><div class="ag-column-drop-list ag-column-drop-horizontal-list"><span class="ag-column-drop-empty-message ag-column-drop-horizontal-empty-message">Drag here to set column labels</span></div></div></div>
+                <div class="ag-root-wrapper-body ag-layout-normal ag-focus-managed" ref="rootWrapperBody"><div class="ag-tab-guard ag-tab-guard-top" role="presentation" tabindex="0"></div>
+                    <!--AG-GRID-COMP--><div class="ag-root ag-unselectable ag-layout-normal" role="grid" unselectable="on" ref="gridPanel" aria-rowcount="1" aria-multiselectable="true" aria-colcount="14">
+        <!--AG-HEADER-ROOT--><div class="ag-header ag-focus-managed ag-pivot-off" role="presentation" ref="headerRoot" unselectable="on" style="height: 33px; min-height: 33px;">
+            <div class="ag-pinned-left-header" ref="ePinnedLeftHeader" role="presentation" style="width: 147px; max-width: 147px; min-width: 147px;"><div class="ag-header-row ag-header-row-column" role="row" aria-rowindex="1" style="top: 0px; height: 32px; width: 130px;"><div class="ag-header-cell ag-focus-managed" role="columnheader" unselectable="on" tabindex="-1" style="width: 130px; left: 0px;" aria-colindex="5" col-id="12">
+            <div ref="eResize" class="ag-header-cell-resize ag-hidden" role="presentation"></div>
+            <!--AG-CHECKBOX--><div role="presentation" ref="cbSelectAll" class="ag-header-select-all ag-labeled ag-label-align-right ag-checkbox ag-input-field ag-hidden">
+                <div ref="eLabel" class="ag-input-field-label ag-label ag-hidden ag-checkbox-label"></div>
+                <div ref="eWrapper" class="ag-wrapper ag-input-wrapper ag-checkbox-input-wrapper" role="presentation">
+                    <input ref="eInput" class="ag-input-field-input ag-checkbox-input" type="checkbox" id="ag-37-input" tabindex="-1" aria-label="Press Space to toggle all rows selection (unchecked)">
+                </div>
+            </div>
+        <div class="ag-cell-label-container">
+            <span ref="eMenu" class="ag-header-icon ag-header-cell-menu-button" aria-hidden="true"><span class="ag-icon ag-icon-menu" unselectable="on" role="presentation"></span></span>
+            <div ref="eLabel" class="ag-header-cell-label" role="presentation" unselectable="on">
+                <span ref="eText" class="ag-header-cell-text" unselectable="on">عملیات</span>
+                <span ref="eFilter" class="ag-header-icon ag-header-label-icon ag-filter-icon ag-hidden" aria-hidden="true"><span class="ag-icon ag-icon-filter" unselectable="on" role="presentation"></span></span>
+                
+                
+                
+                
+            </div>
+        </div></div></div></div>
+            <div class="ag-header-viewport" ref="eHeaderViewport" role="presentation">
+                <div class="ag-header-container" ref="eHeaderContainer" role="rowgroup" style="width: 1155px; transform: translateX(0px);"><div class="ag-header-row ag-header-row-column" role="row" aria-rowindex="1" style="top: 0px; height: 32px; width: 1155px;"><div class="ag-header-cell ag-focus-managed ag-header-cell-sortable" role="columnheader" unselectable="on" tabindex="-1" style="width: 180px; left: 975px;" aria-sort="none" aria-colindex="6" col-id="3">
+            <div ref="eResize" class="ag-header-cell-resize" role="presentation"></div>
+            <!--AG-CHECKBOX--><div role="presentation" ref="cbSelectAll" class="ag-header-select-all ag-labeled ag-label-align-right ag-checkbox ag-input-field ag-hidden">
+                <div ref="eLabel" class="ag-input-field-label ag-label ag-hidden ag-checkbox-label"></div>
+                <div ref="eWrapper" class="ag-wrapper ag-input-wrapper ag-checkbox-input-wrapper" role="presentation">
+                    <input ref="eInput" class="ag-input-field-input ag-checkbox-input" type="checkbox" id="ag-16-input" tabindex="-1" aria-label="Press Space to toggle all rows selection (unchecked)">
+                </div>
+            </div>
+        <div class="ag-cell-label-container ag-header-cell-sorted-none">
+            <span ref="eMenu" class="ag-header-icon ag-header-cell-menu-button" aria-hidden="true"><span class="ag-icon ag-icon-menu" unselectable="on" role="presentation"></span></span>
+            <div ref="eLabel" class="ag-header-cell-label" role="presentation" unselectable="on">
+                <span ref="eText" class="ag-header-cell-text" unselectable="on">وضعیت سفارش</span>
+                <span ref="eFilter" class="ag-header-icon ag-header-label-icon ag-filter-icon ag-hidden" aria-hidden="true"><span class="ag-icon ag-icon-filter" unselectable="on" role="presentation"></span></span>
+                <span ref="eSortOrder" class="ag-header-icon ag-header-label-icon ag-sort-order ag-hidden" aria-hidden="true"></span>
+                <span ref="eSortAsc" class="ag-header-icon ag-header-label-icon ag-sort-ascending-icon ag-hidden" aria-hidden="true"><span class="ag-icon ag-icon-asc" unselectable="on" role="presentation"></span></span>
+                <span ref="eSortDesc" class="ag-header-icon ag-header-label-icon ag-sort-descending-icon ag-hidden" aria-hidden="true"><span class="ag-icon ag-icon-desc" unselectable="on" role="presentation"></span></span>
+                <span ref="eSortNone" class="ag-header-icon ag-header-label-icon ag-sort-none-icon ag-hidden" aria-hidden="true"><span class="ag-icon ag-icon-none" unselectable="on" role="presentation"></span></span>
+            </div>
+        </div></div><div class="ag-header-cell ag-focus-managed ag-header-cell-sortable" role="columnheader" unselectable="on" tabindex="-1" style="width: 125px; left: 850px;" aria-sort="none" aria-colindex="7" col-id="4">
+            <div ref="eResize" class="ag-header-cell-resize" role="presentation"></div>
+            <!--AG-CHECKBOX--><div role="presentation" ref="cbSelectAll" class="ag-header-select-all ag-labeled ag-label-align-right ag-checkbox ag-input-field ag-hidden">
+                <div ref="eLabel" class="ag-input-field-label ag-label ag-hidden ag-checkbox-label"></div>
+                <div ref="eWrapper" class="ag-wrapper ag-input-wrapper ag-checkbox-input-wrapper" role="presentation">
+                    <input ref="eInput" class="ag-input-field-input ag-checkbox-input" type="checkbox" id="ag-19-input" tabindex="-1" aria-label="Press Space to toggle all rows selection (unchecked)">
+                </div>
+            </div>
+        <div class="ag-cell-label-container ag-header-cell-sorted-none">
+            <span ref="eMenu" class="ag-header-icon ag-header-cell-menu-button" aria-hidden="true"><span class="ag-icon ag-icon-menu" unselectable="on" role="presentation"></span></span>
+            <div ref="eLabel" class="ag-header-cell-label" role="presentation" unselectable="on">
+                <span ref="eText" class="ag-header-cell-text" unselectable="on">تعداد</span>
+                <span ref="eFilter" class="ag-header-icon ag-header-label-icon ag-filter-icon ag-hidden" aria-hidden="true"><span class="ag-icon ag-icon-filter" unselectable="on" role="presentation"></span></span>
+                <span ref="eSortOrder" class="ag-header-icon ag-header-label-icon ag-sort-order ag-hidden" aria-hidden="true"></span>
+                <span ref="eSortAsc" class="ag-header-icon ag-header-label-icon ag-sort-ascending-icon ag-hidden" aria-hidden="true"><span class="ag-icon ag-icon-asc" unselectable="on" role="presentation"></span></span>
+                <span ref="eSortDesc" class="ag-header-icon ag-header-label-icon ag-sort-descending-icon ag-hidden" aria-hidden="true"><span class="ag-icon ag-icon-desc" unselectable="on" role="presentation"></span></span>
+                <span ref="eSortNone" class="ag-header-icon ag-header-label-icon ag-sort-none-icon ag-hidden" aria-hidden="true"><span class="ag-icon ag-icon-none" unselectable="on" role="presentation"></span></span>
+            </div>
+        </div></div><div class="ag-header-cell ag-focus-managed ag-header-cell-sortable" role="columnheader" unselectable="on" tabindex="-1" style="width: 124px; left: 726px;" aria-sort="none" aria-colindex="8" col-id="5">
+            <div ref="eResize" class="ag-header-cell-resize" role="presentation"></div>
+            <!--AG-CHECKBOX--><div role="presentation" ref="cbSelectAll" class="ag-header-select-all ag-labeled ag-label-align-right ag-checkbox ag-input-field ag-hidden">
+                <div ref="eLabel" class="ag-input-field-label ag-label ag-hidden ag-checkbox-label"></div>
+                <div ref="eWrapper" class="ag-wrapper ag-input-wrapper ag-checkbox-input-wrapper" role="presentation">
+                    <input ref="eInput" class="ag-input-field-input ag-checkbox-input" type="checkbox" id="ag-22-input" tabindex="-1" aria-label="Press Space to toggle all rows selection (unchecked)">
+                </div>
+            </div>
+        <div class="ag-cell-label-container ag-header-cell-sorted-none">
+            <span ref="eMenu" class="ag-header-icon ag-header-cell-menu-button" aria-hidden="true"><span class="ag-icon ag-icon-menu" unselectable="on" role="presentation"></span></span>
+            <div ref="eLabel" class="ag-header-cell-label" role="presentation" unselectable="on">
+                <span ref="eText" class="ag-header-cell-text" unselectable="on">انجام شده</span>
+                <span ref="eFilter" class="ag-header-icon ag-header-label-icon ag-filter-icon ag-hidden" aria-hidden="true"><span class="ag-icon ag-icon-filter" unselectable="on" role="presentation"></span></span>
+                <span ref="eSortOrder" class="ag-header-icon ag-header-label-icon ag-sort-order ag-hidden" aria-hidden="true"></span>
+                <span ref="eSortAsc" class="ag-header-icon ag-header-label-icon ag-sort-ascending-icon ag-hidden" aria-hidden="true"><span class="ag-icon ag-icon-asc" unselectable="on" role="presentation"></span></span>
+                <span ref="eSortDesc" class="ag-header-icon ag-header-label-icon ag-sort-descending-icon ag-hidden" aria-hidden="true"><span class="ag-icon ag-icon-desc" unselectable="on" role="presentation"></span></span>
+                <span ref="eSortNone" class="ag-header-icon ag-header-label-icon ag-sort-none-icon ag-hidden" aria-hidden="true"><span class="ag-icon ag-icon-none" unselectable="on" role="presentation"></span></span>
+            </div>
+        </div></div><div class="ag-header-cell ag-focus-managed ag-header-cell-sortable" role="columnheader" unselectable="on" tabindex="-1" style="width: 124px; left: 602px;" aria-sort="none" aria-colindex="9" col-id="6">
+            <div ref="eResize" class="ag-header-cell-resize" role="presentation"></div>
+            <!--AG-CHECKBOX--><div role="presentation" ref="cbSelectAll" class="ag-header-select-all ag-labeled ag-label-align-right ag-checkbox ag-input-field ag-hidden">
+                <div ref="eLabel" class="ag-input-field-label ag-label ag-hidden ag-checkbox-label"></div>
+                <div ref="eWrapper" class="ag-wrapper ag-input-wrapper ag-checkbox-input-wrapper" role="presentation">
+                    <input ref="eInput" class="ag-input-field-input ag-checkbox-input" type="checkbox" id="ag-25-input" tabindex="-1" aria-label="Press Space to toggle all rows selection (unchecked)">
+                </div>
+            </div>
+        <div class="ag-cell-label-container ag-header-cell-sorted-none">
+            <span ref="eMenu" class="ag-header-icon ag-header-cell-menu-button" aria-hidden="true"><span class="ag-icon ag-icon-menu" unselectable="on" role="presentation"></span></span>
+            <div ref="eLabel" class="ag-header-cell-label" role="presentation" unselectable="on">
+                <span ref="eText" class="ag-header-cell-text" unselectable="on">باقی مانده</span>
+                <span ref="eFilter" class="ag-header-icon ag-header-label-icon ag-filter-icon ag-hidden" aria-hidden="true"><span class="ag-icon ag-icon-filter" unselectable="on" role="presentation"></span></span>
+                <span ref="eSortOrder" class="ag-header-icon ag-header-label-icon ag-sort-order ag-hidden" aria-hidden="true"></span>
+                <span ref="eSortAsc" class="ag-header-icon ag-header-label-icon ag-sort-ascending-icon ag-hidden" aria-hidden="true"><span class="ag-icon ag-icon-asc" unselectable="on" role="presentation"></span></span>
+                <span ref="eSortDesc" class="ag-header-icon ag-header-label-icon ag-sort-descending-icon ag-hidden" aria-hidden="true"><span class="ag-icon ag-icon-desc" unselectable="on" role="presentation"></span></span>
+                <span ref="eSortNone" class="ag-header-icon ag-header-label-icon ag-sort-none-icon ag-hidden" aria-hidden="true"><span class="ag-icon ag-icon-none" unselectable="on" role="presentation"></span></span>
+            </div>
+        </div></div><div class="ag-header-cell ag-focus-managed ag-header-cell-sortable" role="columnheader" unselectable="on" tabindex="-1" style="width: 124px; left: 478px;" aria-sort="none" aria-colindex="10" col-id="7">
+            <div ref="eResize" class="ag-header-cell-resize" role="presentation"></div>
+            <!--AG-CHECKBOX--><div role="presentation" ref="cbSelectAll" class="ag-header-select-all ag-labeled ag-label-align-right ag-checkbox ag-input-field ag-hidden">
+                <div ref="eLabel" class="ag-input-field-label ag-label ag-hidden ag-checkbox-label"></div>
+                <div ref="eWrapper" class="ag-wrapper ag-input-wrapper ag-checkbox-input-wrapper" role="presentation">
+                    <input ref="eInput" class="ag-input-field-input ag-checkbox-input" type="checkbox" id="ag-28-input" tabindex="-1" aria-label="Press Space to toggle all rows selection (unchecked)">
+                </div>
+            </div>
+        <div class="ag-cell-label-container ag-header-cell-sorted-none">
+            <span ref="eMenu" class="ag-header-icon ag-header-cell-menu-button" aria-hidden="true"><span class="ag-icon ag-icon-menu" unselectable="on" role="presentation"></span></span>
+            <div ref="eLabel" class="ag-header-cell-label" role="presentation" unselectable="on">
+                <span ref="eText" class="ag-header-cell-text" unselectable="on">قیمت</span>
+                <span ref="eFilter" class="ag-header-icon ag-header-label-icon ag-filter-icon ag-hidden" aria-hidden="true"><span class="ag-icon ag-icon-filter" unselectable="on" role="presentation"></span></span>
+                <span ref="eSortOrder" class="ag-header-icon ag-header-label-icon ag-sort-order ag-hidden" aria-hidden="true"></span>
+                <span ref="eSortAsc" class="ag-header-icon ag-header-label-icon ag-sort-ascending-icon ag-hidden" aria-hidden="true"><span class="ag-icon ag-icon-asc" unselectable="on" role="presentation"></span></span>
+                <span ref="eSortDesc" class="ag-header-icon ag-header-label-icon ag-sort-descending-icon ag-hidden" aria-hidden="true"><span class="ag-icon ag-icon-desc" unselectable="on" role="presentation"></span></span>
+                <span ref="eSortNone" class="ag-header-icon ag-header-label-icon ag-sort-none-icon ag-hidden" aria-hidden="true"><span class="ag-icon ag-icon-none" unselectable="on" role="presentation"></span></span>
+            </div>
+        </div></div><div class="ag-header-cell ag-focus-managed ag-header-cell-sortable" role="columnheader" unselectable="on" tabindex="-1" style="width: 150px; left: 328px;" aria-sort="none" aria-colindex="11" col-id="8">
+            <div ref="eResize" class="ag-header-cell-resize" role="presentation"></div>
+            <!--AG-CHECKBOX--><div role="presentation" ref="cbSelectAll" class="ag-header-select-all ag-labeled ag-label-align-right ag-checkbox ag-input-field ag-hidden">
+                <div ref="eLabel" class="ag-input-field-label ag-label ag-hidden ag-checkbox-label"></div>
+                <div ref="eWrapper" class="ag-wrapper ag-input-wrapper ag-checkbox-input-wrapper" role="presentation">
+                    <input ref="eInput" class="ag-input-field-input ag-checkbox-input" type="checkbox" id="ag-31-input" tabindex="-1" aria-label="Press Space to toggle all rows selection (unchecked)">
+                </div>
+            </div>
+        <div class="ag-cell-label-container ag-header-cell-sorted-none">
+            <span ref="eMenu" class="ag-header-icon ag-header-cell-menu-button" aria-hidden="true"><span class="ag-icon ag-icon-menu" unselectable="on" role="presentation"></span></span>
+            <div ref="eLabel" class="ag-header-cell-label" role="presentation" unselectable="on">
+                <span ref="eText" class="ag-header-cell-text" unselectable="on">تاریخ ثبت</span>
+                <span ref="eFilter" class="ag-header-icon ag-header-label-icon ag-filter-icon ag-hidden" aria-hidden="true"><span class="ag-icon ag-icon-filter" unselectable="on" role="presentation"></span></span>
+                <span ref="eSortOrder" class="ag-header-icon ag-header-label-icon ag-sort-order ag-hidden" aria-hidden="true"></span>
+                <span ref="eSortAsc" class="ag-header-icon ag-header-label-icon ag-sort-ascending-icon ag-hidden" aria-hidden="true"><span class="ag-icon ag-icon-asc" unselectable="on" role="presentation"></span></span>
+                <span ref="eSortDesc" class="ag-header-icon ag-header-label-icon ag-sort-descending-icon ag-hidden" aria-hidden="true"><span class="ag-icon ag-icon-desc" unselectable="on" role="presentation"></span></span>
+                <span ref="eSortNone" class="ag-header-icon ag-header-label-icon ag-sort-none-icon ag-hidden" aria-hidden="true"><span class="ag-icon ag-icon-none" unselectable="on" role="presentation"></span></span>
+            </div>
+        </div></div><div class="ag-header-cell ag-focus-managed ag-header-cell-sortable" role="columnheader" unselectable="on" tabindex="-1" style="width: 124px; left: 204px;" aria-sort="none" aria-colindex="12" col-id="9">
+            <div ref="eResize" class="ag-header-cell-resize" role="presentation"></div>
+            <!--AG-CHECKBOX--><div role="presentation" ref="cbSelectAll" class="ag-header-select-all ag-labeled ag-label-align-right ag-checkbox ag-input-field ag-hidden">
+                <div ref="eLabel" class="ag-input-field-label ag-label ag-hidden ag-checkbox-label"></div>
+                <div ref="eWrapper" class="ag-wrapper ag-input-wrapper ag-checkbox-input-wrapper" role="presentation">
+                    <input ref="eInput" class="ag-input-field-input ag-checkbox-input" type="checkbox" id="ag-34-input" tabindex="-1" aria-label="Press Space to toggle all rows selection (unchecked)">
+                </div>
+            </div>
+        <div class="ag-cell-label-container ag-header-cell-sorted-none">
+            <span ref="eMenu" class="ag-header-icon ag-header-cell-menu-button" aria-hidden="true"><span class="ag-icon ag-icon-menu" unselectable="on" role="presentation"></span></span>
+            <div ref="eLabel" class="ag-header-cell-label" role="presentation" unselectable="on">
+                <span ref="eText" class="ag-header-cell-text" unselectable="on">جایگاه لحظه‌ای</span>
+                <span ref="eFilter" class="ag-header-icon ag-header-label-icon ag-filter-icon ag-hidden" aria-hidden="true"><span class="ag-icon ag-icon-filter" unselectable="on" role="presentation"></span></span>
+                <span ref="eSortOrder" class="ag-header-icon ag-header-label-icon ag-sort-order ag-hidden" aria-hidden="true"></span>
+                <span ref="eSortAsc" class="ag-header-icon ag-header-label-icon ag-sort-ascending-icon ag-hidden" aria-hidden="true"><span class="ag-icon ag-icon-asc" unselectable="on" role="presentation"></span></span>
+                <span ref="eSortDesc" class="ag-header-icon ag-header-label-icon ag-sort-descending-icon ag-hidden" aria-hidden="true"><span class="ag-icon ag-icon-desc" unselectable="on" role="presentation"></span></span>
+                <span ref="eSortNone" class="ag-header-icon ag-header-label-icon ag-sort-none-icon ag-hidden" aria-hidden="true"><span class="ag-icon ag-icon-none" unselectable="on" role="presentation"></span></span>
+            </div>
+        </div></div><div class="ag-header-cell ag-focus-managed ag-header-cell-sortable" role="columnheader" unselectable="on" tabindex="-1" style="width: 124px; left: 80px;" aria-sort="none" aria-colindex="13" col-id="10">
+            <div ref="eResize" class="ag-header-cell-resize" role="presentation"></div>
+            <!--AG-CHECKBOX--><div role="presentation" ref="cbSelectAll" class="ag-header-select-all ag-labeled ag-label-align-right ag-checkbox ag-input-field ag-hidden">
+                <div ref="eLabel" class="ag-input-field-label ag-label ag-hidden ag-checkbox-label"></div>
+                <div ref="eWrapper" class="ag-wrapper ag-input-wrapper ag-checkbox-input-wrapper" role="presentation">
+                    <input ref="eInput" class="ag-input-field-input ag-checkbox-input" type="checkbox" id="ag-46-input" tabindex="-1" aria-label="Press Space to toggle all rows selection (unchecked)">
+                </div>
+            </div>
+        <div class="ag-cell-label-container ag-header-cell-sorted-none">
+            <span ref="eMenu" class="ag-header-icon ag-header-cell-menu-button" aria-hidden="true"><span class="ag-icon ag-icon-menu" unselectable="on" role="presentation"></span></span>
+            <div ref="eLabel" class="ag-header-cell-label" role="presentation" unselectable="on">
+                <span ref="eText" class="ag-header-cell-text" unselectable="on">حجم پیش رو</span>
+                <span ref="eFilter" class="ag-header-icon ag-header-label-icon ag-filter-icon ag-hidden" aria-hidden="true"><span class="ag-icon ag-icon-filter" unselectable="on" role="presentation"></span></span>
+                <span ref="eSortOrder" class="ag-header-icon ag-header-label-icon ag-sort-order ag-hidden" aria-hidden="true"></span>
+                <span ref="eSortAsc" class="ag-header-icon ag-header-label-icon ag-sort-ascending-icon ag-hidden" aria-hidden="true"><span class="ag-icon ag-icon-asc" unselectable="on" role="presentation"></span></span>
+                <span ref="eSortDesc" class="ag-header-icon ag-header-label-icon ag-sort-descending-icon ag-hidden" aria-hidden="true"><span class="ag-icon ag-icon-desc" unselectable="on" role="presentation"></span></span>
+                <span ref="eSortNone" class="ag-header-icon ag-header-label-icon ag-sort-none-icon ag-hidden" aria-hidden="true"><span class="ag-icon ag-icon-none" unselectable="on" role="presentation"></span></span>
+            </div>
+        </div></div><div class="ag-header-cell ag-focus-managed" role="columnheader" unselectable="on" tabindex="-1" style="width: 80px; left: 0px;" aria-colindex="14" col-id="11">
+            <div ref="eResize" class="ag-header-cell-resize ag-hidden" role="presentation"></div>
+            <!--AG-CHECKBOX--><div role="presentation" ref="cbSelectAll" class="ag-header-select-all ag-labeled ag-label-align-right ag-checkbox ag-input-field ag-hidden">
+                <div ref="eLabel" class="ag-input-field-label ag-label ag-hidden ag-checkbox-label"></div>
+                <div ref="eWrapper" class="ag-wrapper ag-input-wrapper ag-checkbox-input-wrapper" role="presentation">
+                    <input ref="eInput" class="ag-input-field-input ag-checkbox-input" type="checkbox" id="ag-49-input" tabindex="-1" aria-label="Press Space to toggle all rows selection (unchecked)">
+                </div>
+            </div>
+        <div class="ag-cell-label-container">
+            <span ref="eMenu" class="ag-header-icon ag-header-cell-menu-button" aria-hidden="true"><span class="ag-icon ag-icon-menu" unselectable="on" role="presentation"></span></span>
+            <div ref="eLabel" class="ag-header-cell-label" role="presentation" unselectable="on">
+                <span ref="eText" class="ag-header-cell-text" unselectable="on">سایر</span>
+                <span ref="eFilter" class="ag-header-icon ag-header-label-icon ag-filter-icon ag-hidden" aria-hidden="true"><span class="ag-icon ag-icon-filter" unselectable="on" role="presentation"></span></span>
+                
+                
+                
+                
+            </div>
+        </div></div></div></div>
+            </div>
+            <div class="ag-pinned-right-header" ref="ePinnedRightHeader" role="presentation" style="width: 155px; max-width: 155px; min-width: 155px;"><div class="ag-header-row ag-header-row-column" role="row" aria-rowindex="1" style="top: 0px; height: 32px; width: 155px;"><div class="ag-header-cell ag-focus-managed ag-header-cell-sortable" role="columnheader" unselectable="on" tabindex="-1" style="width: 100px; left: 55px;" aria-sort="none" aria-colindex="3" col-id="1">
+            <div ref="eResize" class="ag-header-cell-resize" role="presentation"></div>
+            <!--AG-CHECKBOX--><div role="presentation" ref="cbSelectAll" class="ag-header-select-all ag-labeled ag-label-align-right ag-checkbox ag-input-field ag-hidden">
+                <div ref="eLabel" class="ag-input-field-label ag-label ag-hidden ag-checkbox-label"></div>
+                <div ref="eWrapper" class="ag-wrapper ag-input-wrapper ag-checkbox-input-wrapper" role="presentation">
+                    <input ref="eInput" class="ag-input-field-input ag-checkbox-input" type="checkbox" id="ag-40-input" tabindex="-1" aria-label="Press Space to toggle all rows selection (unchecked)">
+                </div>
+            </div>
+        <app-symbol-header _nghost-fkr-c183=""><div _ngcontent-fkr-c183="" class="d-flex align-items-center justify-content-between px-2"><div _ngcontent-fkr-c183="" class="customHeaderLabel">نماد</div><span _ngcontent-fkr-c183="" class="mdi mdi-magnify pr-2"></span><!----><!----><!----><!----></div></app-symbol-header></div><div class="ag-header-cell ag-focus-managed ag-header-cell-sortable" role="columnheader" unselectable="on" tabindex="-1" style="width: 55px; left: 0px;" aria-sort="none" aria-colindex="4" col-id="2">
+            <div ref="eResize" class="ag-header-cell-resize" role="presentation"></div>
+            <!--AG-CHECKBOX--><div role="presentation" ref="cbSelectAll" class="ag-header-select-all ag-labeled ag-label-align-right ag-checkbox ag-input-field ag-hidden">
+                <div ref="eLabel" class="ag-input-field-label ag-label ag-hidden ag-checkbox-label"></div>
+                <div ref="eWrapper" class="ag-wrapper ag-input-wrapper ag-checkbox-input-wrapper" role="presentation">
+                    <input ref="eInput" class="ag-input-field-input ag-checkbox-input" type="checkbox" id="ag-42-input" tabindex="-1" aria-label="Press Space to toggle all rows selection (unchecked)">
+                </div>
+            </div>
+        <div class="ag-cell-label-container ag-header-cell-sorted-none">
+            <span ref="eMenu" class="ag-header-icon ag-header-cell-menu-button" aria-hidden="true"><span class="ag-icon ag-icon-menu" unselectable="on" role="presentation"></span></span>
+            <div ref="eLabel" class="ag-header-cell-label" role="presentation" unselectable="on">
+                <span ref="eText" class="ag-header-cell-text" unselectable="on">سمت</span>
+                <span ref="eFilter" class="ag-header-icon ag-header-label-icon ag-filter-icon ag-hidden" aria-hidden="true"><span class="ag-icon ag-icon-filter" unselectable="on" role="presentation"></span></span>
+                <span ref="eSortOrder" class="ag-header-icon ag-header-label-icon ag-sort-order ag-hidden" aria-hidden="true"></span>
+                <span ref="eSortAsc" class="ag-header-icon ag-header-label-icon ag-sort-ascending-icon ag-hidden" aria-hidden="true"><span class="ag-icon ag-icon-asc" unselectable="on" role="presentation"></span></span>
+                <span ref="eSortDesc" class="ag-header-icon ag-header-label-icon ag-sort-descending-icon ag-hidden" aria-hidden="true"><span class="ag-icon ag-icon-desc" unselectable="on" role="presentation"></span></span>
+                <span ref="eSortNone" class="ag-header-icon ag-header-label-icon ag-sort-none-icon ag-hidden" aria-hidden="true"><span class="ag-icon ag-icon-none" unselectable="on" role="presentation"></span></span>
+            </div>
+        </div></div></div></div>
+        </div>
+        <div class="ag-floating-top" ref="eTop" role="presentation" unselectable="on" style="min-height: 0px; height: 0px; display: none; overflow-y: scroll;">
+            <div class="ag-pinned-left-floating-top" ref="eLeftTop" role="presentation" unselectable="on" style="width: 130px; max-width: 130px; min-width: 130px;"></div>
+            <div class="ag-floating-top-viewport" ref="eTopViewport" role="presentation" unselectable="on">
+                <div class="ag-floating-top-container" ref="eTopContainer" role="presentation" unselectable="on" style="width: 1155px; transform: translateX(0px);"></div>
+            </div>
+            <div class="ag-pinned-right-floating-top" ref="eRightTop" role="presentation" unselectable="on" style="width: 155px; max-width: 155px; min-width: 155px;"></div>
+            <div class="ag-floating-top-full-width-container ag-hidden" ref="eTopFullWidthContainer" role="presentation" unselectable="on"></div>
+        </div>
+        <div class="ag-body-viewport ag-layout-normal ag-row-animation" ref="eBodyViewport" role="presentation">
+            <div class="ag-pinned-left-cols-container" ref="eLeftContainer" role="presentation" unselectable="on" style="height: 1px; width: 130px; max-width: 130px; min-width: 130px;"></div>
+            <div class="ag-center-cols-clipper" ref="eCenterColsClipper" role="presentation" unselectable="on" style="height: 1px;">
+                <div class="ag-center-cols-viewport" ref="eCenterViewport" role="presentation" style="height: calc(100% + 0px);">
+                    <div class="ag-center-cols-container" ref="eCenterContainer" role="rowgroup" unselectable="on" style="width: 1155px; height: 1px;"></div>
+                </div>
+            </div>
+            <div class="ag-pinned-right-cols-container" ref="eRightContainer" role="presentation" unselectable="on" style="height: 1px; width: 155px; max-width: 155px; min-width: 155px;"></div>
+            <div class="ag-full-width-container" ref="eFullWidthContainer" role="presentation" unselectable="on" style="height: 1px;"></div>
+        </div>
+        <div class="ag-floating-bottom" ref="eBottom" role="presentation" unselectable="on" style="min-height: 0px; height: 0px; display: none; overflow-y: scroll;">
+            <div class="ag-pinned-left-floating-bottom" ref="eLeftBottom" role="presentation" unselectable="on" style="width: 130px; max-width: 130px; min-width: 130px;"></div>
+            <div class="ag-floating-bottom-viewport" ref="eBottomViewport" role="presentation" unselectable="on">
+                <div class="ag-floating-bottom-container" ref="eBottomContainer" role="presentation" unselectable="on" style="width: 1155px; transform: translateX(0px);"></div>
+            </div>
+            <div class="ag-pinned-right-floating-bottom" ref="eRightBottom" role="presentation" unselectable="on" style="width: 155px; max-width: 155px; min-width: 155px;"></div>
+            <div class="ag-floating-bottom-full-width-container ag-hidden" ref="eBottomFullWidthContainer" role="presentation" unselectable="on"></div>
+        </div>
+        <div class="ag-body-horizontal-scroll" ref="eHorizontalScrollBody" aria-hidden="true" style="height: 0px; max-height: 0px; min-height: 0px;">
+            <div class="ag-horizontal-left-spacer" ref="eHorizontalLeftSpacer" style="width: 147px; max-width: 147px; min-width: 147px;"></div>
+            <div class="ag-body-horizontal-scroll-viewport" ref="eBodyHorizontalScrollViewport" style="height: 0px; max-height: 0px; min-height: 0px;">
+                <div class="ag-body-horizontal-scroll-container" ref="eBodyHorizontalScrollContainer" style="width: 1155px; height: 0px; max-height: 0px; min-height: 0px;"></div>
+            </div>
+            <div class="ag-horizontal-right-spacer" ref="eHorizontalRightSpacer" style="width: 155px; max-width: 155px; min-width: 155px;"></div>
+        </div>
+        <!--AG-OVERLAY-WRAPPER--><div class="ag-overlay" aria-hidden="true" ref="overlayWrapper">
+            <div class="ag-overlay-panel">
+                <div class="ag-overlay-wrapper ag-layout-normal ag-overlay-no-rows-wrapper" ref="eOverlayWrapper"><div dir="rtl">رکوردی وجود ندارد</div></div>
+            </div>
+        </div>
+    </div>
+                    <!--AG-SIDE-BAR--><div class="ag-side-bar ag-unselectable ag-hidden" ref="sideBar">
+            <!--AG-SIDE-BAR-BUTTONS--><div class="ag-side-buttons" ref="sideBarButtons"></div>
+        </div>
+                <div class="ag-tab-guard ag-tab-guard-bottom" role="presentation" tabindex="0"></div></div>
+                <!--AG-STATUS-BAR--><div class="ag-status-bar ag-hidden" ref="statusBar">
+            <div ref="eStatusBarLeft" class="ag-status-bar-left"></div>
+            <div ref="eStatusBarCenter" class="ag-status-bar-center"></div>
+            <div ref="eStatusBarRight" class="ag-status-bar-right"></div>
+        </div>
+                <!--AG-PAGINATION--><div class="ag-paging-panel ag-unselectable ag-hidden" id="ag-10" aria-live="polite" aria-describedby="ag-10-start-page ag-10-start-page-number ag-10-of-page ag-10-of-page-number ag-10-first-row ag-10-to ag-10-last-row ag-10-of ag-10-row-count">
+                <span class="ag-paging-row-summary-panel" aria-hidden="true">
+                    <span id="ag-10-first-row" ref="lbFirstRowOnPage" class="ag-paging-row-summary-panel-number"></span>
+                    <span id="ag-10-to">to</span>
+                    <span id="ag-10-last-row" ref="lbLastRowOnPage" class="ag-paging-row-summary-panel-number"></span>
+                    <span id="ag-10-of">of</span>
+                    <span id="ag-10-row-count" ref="lbRecordCount" class="ag-paging-row-summary-panel-number"></span>
+                </span>
+                <span class="ag-paging-page-summary-panel" role="presentation">
+                    <div ref="btFirst" class="ag-paging-button" role="button" aria-label="First Page" tabindex="0"><span class="ag-icon ag-icon-last" unselectable="on" role="presentation"></span></div>
+                    <div ref="btPrevious" class="ag-paging-button" role="button" aria-label="Previous Page" tabindex="0"><span class="ag-icon ag-icon-next" unselectable="on" role="presentation"></span></div>
+                    <span class="ag-paging-description" aria-hidden="true">
+                        <span id="ag-10-start-page">Page</span>
+                        <span id="ag-10-start-page-number" ref="lbCurrent" class="ag-paging-number"></span>
+                        <span id="ag-10-of-page">of</span>
+                        <span id="ag-10-of-page-number" ref="lbTotal" class="ag-paging-number"></span>
+                    </span>
+                    <div ref="btNext" class="ag-paging-button" role="button" aria-label="Next Page" tabindex="0"><span class="ag-icon ag-icon-previous" unselectable="on" role="presentation"></span></div>
+                    <div ref="btLast" class="ag-paging-button" role="button" aria-label="Last Page" tabindex="0"><span class="ag-icon ag-icon-first" unselectable="on" role="presentation"></span></div>
+                </span>
+            </div>
+                <!--AG-WATERMARK--><div class="ag-watermark ag-hidden">
+                    <div ref="eLicenseTextRef" class="ag-watermark-text"></div>
+               </div>
+            </div></ag-grid-angular><!----></div><!----></div></div></div></d-orders-grid></as-split-area><!----><div _ngcontent-fkr-c157="" class="as-split-gutter" style="flex-basis: 8px; order: 1;"><div _ngcontent-fkr-c157="" class="as-split-gutter-icon"></div></div><!----><!----><!----></as-split><div _ngcontent-fkr-c214="" class="position-relative status-bar mt-2"><span _ngcontent-fkr-c214="" class="horizontal-collapse"><span _ngcontent-fkr-c214="" class="mdi mdi-18px"></span></span><market-data _ngcontent-fkr-c214="" class="d-block" _nghost-fkr-c118=""><div _ngcontent-fkr-c118="" class="bottombar d-flex justify-content-between align-items-center text-muted p-2 rounded"><div _ngcontent-fkr-c118="" class="d-flex align-items-center"><span _ngcontent-fkr-c118="" class="ml-2 font-weight-bold"><span _ngcontent-fkr-c118="" class="mdi mdi-18px mdi-account-circle-outline"></span> مهدی شیخی زازرانی </span></div><div _ngcontent-fkr-c118="" class="d-flex align-items-center"><div _ngcontent-fkr-c118="" triggers="mouseenter:mouseleave" class="d-flex align-items-center"><span _ngcontent-fkr-c118="">قدرت خرید:&nbsp;</span><span _ngcontent-fkr-c118="" dir="ltr" class="text-reverse"> ۸۳,۲۵۰ </span><small _ngcontent-fkr-c118="" class="mr-1">ریال</small></div><!----></div><!----><!----><!----><div _ngcontent-fkr-c118="" class="d-flex align-items-center"><div _ngcontent-fkr-c118=""><span _ngcontent-fkr-c118="">شاخص بورس:&nbsp;</span><span _ngcontent-fkr-c118="" dir="ltr"><span _ngcontent-fkr-c118="" class="text-reverse">۱,۱۴۱,۲۹۰</span><span _ngcontent-fkr-c118="" dir="ltr" class="text-danger"> -۳,۶۶۵ (-۰.۳۲٪) </span></span></div></div><div _ngcontent-fkr-c118="" class="d-flex align-items-center"><easy-clock _ngcontent-fkr-c118="" class="text-reverse text-left ml-1" style="min-width: 60px;" _nghost-fkr-c114=""><span _ngcontent-fkr-c114="" class="font-weight-bold">17:02:41</span></easy-clock><ls-connection-state _ngcontent-fkr-c118="" _nghost-fkr-c117=""><span _ngcontent-fkr-c117="" class="mdi mdi-18px line-height-none text-success mdi-server-network" title="متصل"></span></ls-connection-state></div></div><!----><!----><!----><!----><!----><!----></market-data><!----></div></div></div></div><d-search-management _ngcontent-fkr-c214="" class="d-flex flex-column overflow-hidden" _nghost-fkr-c190=""><div _ngcontent-fkr-c190="" class="d-flex align-items-center justify-content-between p-2 flex-shrink-0"><h6 _ngcontent-fkr-c190="" class="mb-0">جستجو</h6><span _ngcontent-fkr-c190="" class="mdi mdi-24px line-height-24px text-muted mdi-blank" style="touch-action: pan-y; user-select: none;"></span></div><!----></d-search-management><popup-order _ngcontent-fkr-c214="" class="position-absolute d-flex justify-content-center align-items-center" _nghost-fkr-c195=""><!----><!----><!----></popup-order></main></main-layout><app-notify _ngcontent-fkr-c216="" _nghost-fkr-c132=""><!----><div _ngcontent-fkr-c132="" class="notify d-flex flex-column justify-content-end"><!----></div><!----></app-notify><waiting-for-login _ngcontent-fkr-c216="" _nghost-fkr-c148=""><!----></waiting-for-login><d-release-notes _ngcontent-fkr-c216="" class="position-relative" style="z-index: 121;" _nghost-fkr-c215=""><!----></d-release-notes><connection-failed _ngcontent-fkr-c216="" _nghost-fkr-c112=""><!----></connection-failed><add-to-watch-panel _ngcontent-fkr-c216="" _nghost-fkr-c105=""><!----><!----></add-to-watch-panel></app-root>
+  <noscript>Please enable JavaScript to continue using this application.</noscript>
+
+  <!-- Global site tag (gtag.js) - Google Analytics -->
+  <script type="text/javascript" async="" src="EasyTrader_files/analytics.js"></script><script async="" src="EasyTrader_files/js"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', 'UA-151461760-2');
+  </script>
+  
+
+  <!-- trading view moved to scriptLoaderService -->
+  <!-- <script async src="/assets/tv/jquery-3.4.1.slim.min.js"></script>
+  <script async src="/assets/datafeeds/udf/dist/polyfills.js"></script>
+  <script async src="/assets/datafeeds/udf/dist/bundle.js"></script> -->
+  
+  <!-- <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"></script>
+  </script>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500&amp;display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> -->
+  <!-- <link href="/assets/tv/fontsFamilyRoboto.css" rel="stylesheet">
+    <link href="/assets/tv/fontsIconMaterialIcons.css" rel="stylesheet"> -->
+
+  <!-- moved to scriptLoaderService -->
+  <!-- <script async src="/assets/js/my-crisp.js"></script> -->
+
+<script src="EasyTrader_files/runtime-es2015.js" type="module"></script><script src="EasyTrader_files/runtime-es5.js" nomodule="" defer="defer"></script><script src="EasyTrader_files/polyfills-es5.js" nomodule="" defer="defer"></script><script src="EasyTrader_files/polyfills-es2015.js" type="module"></script><script src="EasyTrader_files/scripts.js" defer="defer"></script><script src="EasyTrader_files/main-es2015.js" type="module"></script><script src="EasyTrader_files/main-es5.js" nomodule="" defer="defer"></script>
+
+<iframe style="visibility: hidden; position: absolute; display: none; width: 0px; height: 0px;" src="EasyTrader_files/checksession.htm"></iframe><div class="crisp-client"><div class="cc-l3zb"><div class="cc-lcor"><style type="text/css">.crisp-client .cc-kv6t .cc-6zjc,
+.crisp-client .cc-kv6t .cc-1mk2:hover {
+  color: #FFFFFF !important;
+}
+
+.crisp-client .cc-kv6t .cc-10m9,
+.crisp-client .cc-kv6t .cc-17tf:hover {
+  color: #003649 !important;
+}
+
+.crisp-client .cc-kv6t .cc-dkda,
+.crisp-client .cc-kv6t .cc-r4ie:hover {
+  color: #00516d !important;
+}
+
+.crisp-client .cc-kv6t .cc-jq4y,
+.crisp-client .cc-kv6t .cc-5lan:hover {
+  color: #016d92 !important;
+}
+
+.crisp-client .cc-kv6t .cc-k5w4 {
+  background-color: #FFFFFF !important;
+}
+
+.crisp-client .cc-kv6t .cc-5ekd {
+  background-color: #003649 !important;
+}
+
+.crisp-client .cc-kv6t .cc-16jc {
+  background-color: #005c7c !important;
+}
+
+.crisp-client .cc-kv6t .cc-1ada,
+.crisp-client .cc-kv6t .cc-ew5j:before,
+.crisp-client .cc-kv6t .cc-ew5j:after {
+  background-color: #016d92 !important;
+}
+
+.crisp-client .cc-kv6t .cc-y5jx {
+  background-color: #F2F2F2 !important;
+}
+
+.crisp-client .cc-kv6t .cc-y6ot,
+.crisp-client .cc-kv6t .cc-183m:hover {
+  background-color: #F9F9F9 !important;
+}
+
+.crisp-client .cc-kv6t .cc-1ybb {
+  background-image: linear-gradient(125deg, #016d92 -10%, #003649 100%) !important;
+}
+
+.crisp-client .cc-kv6t .cc-ofgq,
+.crisp-client .cc-kv6t .cc-fg2d:hover {
+  border-color: #FFFFFF !important;
+}
+
+.crisp-client .cc-kv6t .cc-2ydi {
+  border-color: rgba(0, 54, 73, 0.175) !important;
+}
+
+.crisp-client .cc-kv6t .cc-1aev,
+.crisp-client .cc-kv6t .cc-2hzo:hover,
+.crisp-client .cc-kv6t .cc-18sf:before,
+.crisp-client .cc-kv6t .cc-18sf:after {
+  border-color: #016d92 !important;
+}
+
+.crisp-client .cc-kv6t .cc-1nph {
+  border-color: rgba(1, 109, 146, 0.15) !important;
+}
+
+.crisp-client .cc-kv6t .cc-1o96 {
+  border-top-color: #016d92 !important;
+}
+
+.crisp-client .cc-kv6t .cc-ve3u,
+.crisp-client .cc-kv6t .cc-1nmg:hover {
+  border-color: #F2F2F2 !important;
+}
+
+.crisp-client .cc-kv6t .cc-clw4::placeholder {
+  color: #017ba4 !important;
+}
+
+.crisp-client .cc-kv6t .cc-2n8m::placeholder {
+  color: #017ba4 !important;
+}
+
+.crisp-client .cc-kv6t .cc-3x4f,
+.crisp-client .cc-kv6t .cc-1afs:hover,
+.crisp-client .cc-kv6t .cc-3x4f:hover,
+.crisp-client .cc-kv6t .cc-1afs:active,
+.crisp-client .cc-kv6t .cc-3x4f:active,
+.crisp-client .cc-kv6t .cc-1c1d:hover .cc-1f87,
+.crisp-client .cc-kv6t .cc-1c1d .cc-1f87:active {
+  background: #003649 !important;
+}
+
+.crisp-client .cc-kv6t .cc-4xbu,
+.crisp-client .cc-kv6t .cc-caj5:hover {
+  background: #00516d !important;
+}
+
+.crisp-client .cc-kv6t .cc-4xbu:hover,
+.crisp-client .cc-kv6t .cc-caj5:active {
+  background: #00465e !important;
+}
+
+.crisp-client .cc-kv6t .cc-4xbu:active {
+  background: #003649 !important;
+}
+
+.crisp-client .cc-kv6t .cc-g73w:hover .cc-199t {
+  background: #00516d !important;
+}
+
+.crisp-client .cc-kv6t .cc-g73w .cc-199t:active {
+  background: #00465e !important;
+}
+
+.crisp-client .cc-kv6t .cc-vuur,
+.crisp-client .cc-kv6t .cc-7rgf[data-active="true"] {
+  background: #016d92 !important;
+}
+
+.crisp-client .cc-kv6t .cc-vuur:hover,
+.crisp-client .cc-kv6t .cc-7rgf[data-active="true"]:active {
+  background: #005c7c !important;
+}
+
+.crisp-client .cc-kv6t .cc-vuur:active {
+  background: #00516d !important;
+}
+
+.crisp-client .cc-kv6t .cc-1gmp::selection,
+.crisp-client .cc-kv6t .cc-1gmp *::selection {
+  color: #191919 !important;
+  background-color: #017ca6 !important;
+}</style></div><div class="cc-1kny"><style type="text/css">.crisp-client .cc-kv6t {
+  z-index: 1000000;
+}
+</style></div><div class="cc-1wmh"><style type="text/css">.crisp-client .cc-kv6t[data-full-view="false"][data-position-reverse="false"] .cc-1xry .cc-unoo,
+.crisp-client .cc-kv6t[data-full-view="false"][data-position-reverse="false"] .cc-1xry .cc-ge4v {
+  margin-right: 20px !important;
+}
+
+.crisp-client .cc-kv6t[data-full-view="false"][data-position-reverse="false"] .cc-1xry .cc-unoo .cc-1c9v .cc-1bue {
+  margin-right: 20px !important;
+}
+
+.crisp-client .cc-kv6t[data-full-view="false"][data-position-reverse="true"] .cc-1xry .cc-unoo,
+.crisp-client .cc-kv6t[data-full-view="false"][data-position-reverse="true"] .cc-1xry .cc-ge4v {
+  margin-left: 20px !important;
+}
+
+.crisp-client .cc-kv6t[data-full-view="false"][data-position-reverse="true"] .cc-1xry .cc-unoo .cc-1c9v .cc-1bue {
+  margin-left: 20px !important;
+}
+</style><style type="text/css">.crisp-client .cc-kv6t[data-full-view="false"] .cc-1xry .cc-unoo,
+.crisp-client .cc-kv6t[data-full-view="false"] .cc-1xry .cc-ge4v {
+  margin-bottom: 20px !important;
+}
+
+.crisp-client .cc-kv6t[data-full-view="false"] .cc-1xry .cc-unoo .cc-1c9v .cc-1bue {
+  margin-bottom: 20px !important;
+}
+</style><style type="text/css">.crisp-client .cc-kv6t[data-full-view="true"][data-position-reverse="false"] .cc-1xry .cc-unoo {
+  margin-right: -10000px !important;
+}
+
+.crisp-client .cc-kv6t[data-full-view="true"][data-position-reverse="false"] .cc-1xry .cc-unoo .cc-1c9v .cc-1bue {
+  margin-right: -10000px !important;
+}
+
+.crisp-client .cc-kv6t[data-full-view="true"][data-position-reverse="true"] .cc-1xry .cc-unoo {
+  margin-left: -10000px !important;
+}
+
+.crisp-client .cc-kv6t[data-full-view="true"][data-position-reverse="true"] .cc-1xry .cc-unoo .cc-1c9v .cc-1bue {
+  margin-left: -10000px !important;
+}
+</style><style type="text/css">.crisp-client .cc-kv6t[data-full-view="true"] .cc-1xry .cc-unoo {
+  margin-bottom: -10000px !important;
+}
+
+.crisp-client .cc-kv6t[data-full-view="true"] .cc-1xry .cc-unoo .cc-1c9v .cc-1bue {
+  margin-bottom: -10000px !important;
+}</style></div></div><div id="crisp-chatbox" dir="rtl" translate="no" data-blocked="false" data-lock-maximized="false" data-last-operator-face="false" data-availability-tooltip="false" data-hide-vacation="false" data-hide-on-away="false" data-hide-on-mobile="false" data-position-reverse="false" data-full-view="false" data-small-view="false" data-large-view="false" data-availability="online" data-is-activity-ongoing="false" data-was-availability-online="true" data-has-local-messages="false" class="cc-kv6t" lang="fa"><div class="cc-1xry cc-1gmp"><a data-maximized="false" data-is-failure="false" role="button" class="cc-unoo" data-cshid="271623c6-22f1-32aa-4e1b-4df998f57d81" dideo-checked="true"><span class="cc-1c9v"><span data-id="general_entice" data-with-helpdesk="false" data-is-concealed="false" class="cc-1bue"><span class="cc-1bcp"><span class="cc-1s28 cc-kgeu"><span class="cc-tkyh"><span class="cc-1t9t"><span class="cc-g0ak cc-hy0f"></span><span data-has-avatar="true" class="cc-xc93"><span class="cc-17df"><span class="cc-od26 cc-151q">کارگزاری مفید</span><span data-id="online" class="cc-1rau cc-kgeu">«کارشناسان آنلاین هستند»</span><span data-id="away" class="cc-1rau cc-kgeu">«کارشناسان آفلاین هستند»</span></span><span class="cc-56dg"><span class="cc-8exe cc-he6y"><span style="background-image: url('https://image.crisp.chat/process/thumbnail/?url=https%3A%2F%2Fstorage.crisp.chat%2Fusers%2Favatar%2Foperator%2Ff3a181d7d12c0000%2Fmofid-100_403e10.jpg&amp;width=240&amp;height=240&amp;1') !important;" class="cc-1h5w cc-wsm4"></span></span></span></span></span></span><span data-when="online" class="cc-rzi5"><span class="cc-1yk0 cc-183m"><span class="cc-1viy"><span class="cc-16up cc-jq4y cc-151q">کارگــزاری مفیــد</span></span></span></span><span data-when="away" class="cc-rzi5"><span class="cc-1yk0 cc-183m"><span class="cc-1viy"><span class="cc-16up cc-jq4y cc-151q">کارگــزاری مفیــد</span></span></span></span></span></span></span></span><span class="cc-7doi cc-1ada"><span data-id="chat_closed" class="cc-1iv2"><span class="cc-1yxw"><span class="cc-16qx cc-1eqr"></span></span><span data-is-ongoing="false" class="cc-15mo"></span></span></span></a></div></div></div></body></html>

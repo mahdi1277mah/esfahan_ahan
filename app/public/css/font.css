@@ -1,0 +1,42 @@
+@font-face {
+    font-family: iran-sans;
+    src: url("../fonts/IRANSansWeb.woff");
+    font-weight: 500;
+}@font-face {
+    font-family: fa-brands-400;
+    src: url("../fonts/fa-brands-400.woff");
+    font-weight: 500;
+}@font-face {
+    font-family: fa-duotone-900;
+    src: url("../fonts/fa-duotone-900.woff");
+    font-weight: 500;
+}@font-face {
+    font-family: fa-fallback;
+    src: url("../fonts/fa-fallback.woff");
+    font-weight: 500;
+}@font-face {
+    font-family: fa-light-300;
+    src: url("../fonts/fa-light-300.woff");
+    font-weight: 500;
+}@font-face {
+    font-family: fa-regular-400;
+    src: url("../fonts/fa-regular-400.woff");
+    font-weight: 500;
+}@font-face {
+    font-family: fa-solid-900;
+    src: url("../fonts/fa-solid-900.woff");
+    font-weight: 500;
+}@font-face {
+    font-family: iranyekanwebregular;
+    src: url("../fonts/iranyekanwebregular.woff2");
+    font-weight: 500;
+}@font-face {
+    font-family: iranyekanwebbold_FaNum;
+    src: url("../fonts/iranyekanwebbold_FaNum.woff2");
+
+}@font-face {
+    font-family: iranyekanweblight_FaNum;
+    src: url("../fonts/iranyekanweblight_FaNum.woff2");
+    font-weight: 500;
+}
+
